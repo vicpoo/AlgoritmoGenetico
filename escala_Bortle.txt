@@ -1,0 +1,356 @@
+32.5,-115.5
+Zenith (Sky brightness) info (2014)help icon
+Coordinates
+SQM	20.50 mag/arcsec2
+Brightness	0.684 mcd/m2
+Artif. bright.	513 μcd/m2
+Ratio	3.00
+Bortle	class 4
+Elevation	41 meters
+
+
+29.0,-111.0
+Zenith (Sky brightness) info (2025)help icon
+Coordinates
+SQM	19.45 mag/arcsec2
+Brightness	1.80 mcd/m2
+Artif. bright.	1630 μcd/m2
+Ratio	9.51
+Bortle	class 6
+Elevation	197 meters
+
+
+28.5,-106.0
+Zenith (Sky brightness) info (2014)help icon
+Coordinates
+SQM	21.23 mag/arcsec2
+Brightness	0.349 mcd/m2
+Artif. bright.	178 μcd/m2
+Ratio	1.04
+Bortle	class 4
+Elevation	1601 meters
+
+
+25.5,-100.5
+Zenith (Sky brightness) info (2025)help icon
+Coordinates
+SQM	20.95 mag/arcsec2
+Brightness	0.452 mcd/m2
+Artif. bright.	281 μcd/m2
+Ratio	1.64
+Bortle	class 4
+Elevation	2646 meters
+
+
+
+27.5,-99.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	18.04 mag/arcsec2
+Brightness	6.56 mcd/m2
+Artif. bright.	6390 μcd/m2
+Ratio	37.3
+Bortle	class 8-9
+Elevation	114 meters
+
+
+24.5,-107.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.71 mag/arcsec2
+Brightness	0.224 mcd/m2
+Artif. bright.	52.6 μcd/m2
+Ratio	0.308
+Bortle	class 3
+Elevation	1 meters
+
+
+24.0,-104.5
+Zenith (Sky brightness) info (2013)help icon
+Coordinates
+SQM	21.48 mag/arcsec2
+Brightness	0.276 mcd/m2
+Artif. bright.	105 μcd/m2
+Ratio	0.614
+Bortle	class 4
+Elevation	1864 meters
+
+
+22.5,-102.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.80 mag/arcsec2
+Brightness	0.207 mcd/m2
+Artif. bright.	35.5 μcd/m2
+Ratio	0.208
+Bortle	class 3
+Elevation	2308 meters
+
+
+
+22.0,-101.0
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.25 mag/arcsec2
+Brightness	0.343 mcd/m2
+Artif. bright.	172 μcd/m2
+Ratio	1.00
+Bortle	class 4
+Elevation	2381 meters
+
+
+
+22.0,-98.0
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.79 mag/arcsec2
+Brightness	0.208 mcd/m2
+Artif. bright.	36.8 μcd/m2
+Ratio	0.215
+Bortle	class 3
+Elevation	2 meters
+
+
+
+20.5,-105.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.91 mag/arcsec2
+Brightness	0.185 mcd/m2
+Artif. bright.	14.1 μcd/m2
+Ratio	0.0823
+Bortle	class 2
+Elevation	0 meters
+
+
+20.5,-103.5
+Zenith (Sky brightness) info (2021)help icon
+Coordinates
+SQM	19.73 mag/arcsec2
+Brightness	1.39 mcd/m2
+Artif. bright.	1220 μcd/m2
+Ratio	7.13
+Bortle	class 5
+Elevation	1577 meters
+
+
+
+21.0,-101.5
+Zenith (Sky brightness) info (2025)help icon
+Coordinates
+SQM	19.35 mag/arcsec2
+Brightness	1.97 mcd/m2
+Artif. bright.	1800 μcd/m2
+Ratio	10.5
+Bortle	class 6
+Elevation	1799 meters
+
+
+
+
+20.5,-100.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	20.57 mag/arcsec2
+Brightness	0.640 mcd/m2
+Artif. bright.	469 μcd/m2
+Ratio	2.74
+Bortle	class 4
+Elevation	1888 meters
+
+
+
+20.0,-98.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.27 mag/arcsec2
+Brightness	0.334 mcd/m2
+Artif. bright.	163 μcd/m2
+Ratio	0.951
+Bortle	class 4
+Elevation	2612 meter
+
+
+
+20.5,-97.5
+Zenith (Sky brightness) info (2025)help icon
+Coordinates
+SQM	19.35 mag/arcsec2
+Brightness	1.96 mcd/m2
+Artif. bright.	1790 μcd/m2
+Ratio	10.5
+Bortle	class 6
+Elevation	53 meters
+
+
+
+
+19.0,-104.0
+Zenith (Sky brightness) info (2017)help icon
+Coordinates
+SQM	21.67 mag/arcsec2
+Brightness	0.232 mcd/m2
+Artif. bright.	61.1 μcd/m2
+Ratio	0.357
+Bortle	class 4
+Elevation	76 meters
+
+
+
+19.5,-101.5
+Zenith (Sky brightness) info (2013)help icon
+Coordinates
+SQM	21.76 mag/arcsec2
+Brightness	0.213 mcd/m2
+Artif. bright.	41.5 μcd/m2
+Ratio	0.243
+Bortle	class 3
+Elevation	2238 meters
+
+
+
+19.5,-99.5
+Zenith (Sky brightness) info (2013)help icon
+Coordinates
+SQM	20.75 mag/arcsec2
+Brightness	0.543 mcd/m2
+Artif. bright.	372 μcd/m2
+Ratio	2.18
+Bortle	class 4
+Elevation	3370 meters
+
+
+
+19.4,-99.1
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	18.51 mag/arcsec2
+Brightness	4.26 mcd/m2
+Artif. bright.	4090 μcd/m2
+Ratio	23.9
+Bortle	class 7
+Elevation	2231 meters
+
+
+
+19.0,-98.0
+Zenith (Sky brightness) info (2025)help icon
+Coordinates
+SQM	20.46 mag/arcsec2
+Brightness	0.709 mcd/m2
+Artif. bright.	538 μcd/m2
+Ratio	3.15
+Bortle	class 5
+Elevation	2458 meters
+
+
+
+
+19.0,-96.0
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.28 mag/arcsec2
+Brightness	0.331 mcd/m2
+Artif. bright.	160 μcd/m2
+Ratio	0.936
+Bortle	class 4
+Elevation	33 meters
+
+
+
+17.0,-99.5
+Zenith (Sky brightness) info (2025)help icon
+Coordinates
+SQM	21.84 mag/arcsec2
+Brightness	0.199 mcd/m2
+Artif. bright.	27.9 μcd/m2
+Ratio	0.163
+Bortle	class 3
+Elevation	223 meters
+
+
+
+17.0,-96.5
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.54 mag/arcsec2
+Brightness	0.261 mcd/m2
+Artif. bright.	90.2 μcd/m2
+Ratio	0.528
+Bortle	class 4
+Elevation	1649 meters
+
+
+
+16.5,-93.0
+Zenith (Sky brightness) info (2012)help icon
+Coordinates
+SQM	21.61 mag/arcsec2
+Brightness	0.246 mcd/m2
+Artif. bright.	74.4 μcd/m2
+Ratio	0.435
+Bortle	class 4
+Elevation	440 meters
+
+
+
+
+18.0,-93.0
+Zenith (Sky brightness) info (2013)help icon
+Coordinates
+SQM	19.36 mag/arcsec2
+Brightness	1.94 mcd/m2
+Artif. bright.	1770 μcd/m2
+Ratio	10.3
+Bortle	class 6
+Elevation	5 meters
+
+
+
+19.5,-90.5
+Zenith (Sky brightness) info (2014)help icon
+Coordinates
+SQM	21.75 mag/arcsec2
+Brightness	0.215 mcd/m2
+Artif. bright.	44.3 μcd/m2
+Ratio	0.259
+Bortle	class 3
+Elevation	39 meters
+
+
+
+21.0,-89.5
+Zenith (Sky brightness) info (2013)help icon
+Coordinates
+SQM	20.63 mag/arcsec2
+Brightness	0.603 mcd/m2
+Artif. bright.	432 μcd/m2
+Ratio	2.53
+Bortle	class 4
+Elevation	10 meters
+
+
+
+
+21.0,-87.0
+Zenith (Sky brightness) info (2014)help icon
+Coordinates
+SQM	21.44 mag/arcsec2
+Brightness	0.286 mcd/m2
+Artif. bright.	115 μcd/m2
+Ratio	0.672
+Bortle	class 4
+Elevation	12 meters
+
+
+
+
+18.5,-88.5
+Zenith (Sky brightness) info (2013)help icon
+Coordinates
+SQM	21.62 mag/arcsec2
+Brightness	0.243 mcd/m2
+Artif. bright.	71.4 μcd/m2
+Ratio	0.417
+Bortle	class 4
+Elevation	37 meters

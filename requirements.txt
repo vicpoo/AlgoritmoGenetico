@@ -1,0 +1,17 @@
+# AstroOpti - Dependencias
+
+# Procesamiento numérico
+numpy>=1.21.0
+
+# Fechas y tiempo (built-in, no necesita instalación)
+
+# Para gráficos (opcional, si quieres visualizar convergencia)
+matplotlib>=3.5.0
+
+# Para YAML (opcional)
+pyyaml>=6.0
+
+# Para logging y debugging (built-in)
+
+# Nota: La mayoría de las dependencias son de la biblioteca estándar
+# Solo numpy y matplotlib necesitan instalación adicional

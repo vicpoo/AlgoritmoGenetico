@@ -1,0 +1,117 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AstroOpti Web</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background: #0a0f1e; color: #e0e0e0; }
+        .container { max-width: 800px; margin: auto; background: #1a2332; padding: 25px; border-radius: 10px; }
+        input, select, button { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; background: #2a3a4a; color: white; border: 1px solid #4a6a8a; }
+        button { background: #3a6a9a; font-weight: bold; cursor: pointer; }
+        button:hover { background: #4a8aba; }
+        .resultado { background: #0d1520; padding: 15px; margin-top: 20px; border-radius: 8px; border-left: 4px solid #4a8aba; }
+        .spinner { display: none; text-align: center; }
+        .error { color: #ff6b6b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AstroOpti</h1>
+        <p>Optimizador de observación astronómica</p>
+        
+        <form id="form-optimizar">
+            <h3>📍 Ubicación</h3>
+            <label>Latitud:</label>
+            <input type="number" step="any" name="latitud" value="16.7821" required>
+            <label>Longitud:</label>
+            <input type="number" step="any" name="longitud" value="-93.0900" required>
+            <label>Offset UTC:</label>
+            <input type="number" name="offset_utc" value="-6">
+            
+            <h3>📅 Fecha</h3>
+            <label>Fecha (UTC):</label>
+            <input type="date" name="fecha" value="2026-01-06" required>
+            
+            <h3>🔭 Equipo</h3>
+            <label>Objeto:</label>
+            <select name="objeto">
+                {% for obj in objetos %}
+                <option value="{{ obj }}">{{ obj.capitalize() }}</option>
+                {% endfor %}
+            </select>
+            <label>Apertura (mm):</label>
+            <input type="number" name="apertura_mm" value="200">
+            <label>Aumentos (separados por coma):</label>
+            <input type="text" name="aumentos" value="50,100,150,200">
+            
+            <h3>🌤️ Condiciones</h3>
+            <label>Estado del cielo:</label>
+            <select name="estado_cielo">
+                <option value="despejado">Despejado</option>
+                <option value="parcialmente_nublado">Parcialmente nublado</option>
+                <option value="nublado">Nublado</option>
+            </select>
+            <label>¿Luna llena?</label>
+            <select name="luna_llena">
+                <option value="false">No (Luna nueva/creciente)</option>
+                <option value="true">Sí</option>
+            </select>
+            <label>Seeing:</label>
+            <select name="seeing">
+                <option value="bueno">Bueno</option>
+                <option value="regular">Regular</option>
+                <option value="malo">Malo</option>
+            </select>
+            
+            <button type="submit">✨ Optimizar</button>
+        </form>
+        
+        <div class="spinner" id="spinner">⏳ Procesando... (puede tardar hasta 1 minuto)</div>
+        <div id="resultados"></div>
+    </div>
+
+    <script>
+        document.getElementById('form-optimizar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            document.getElementById('spinner').style.display = 'block';
+            document.getElementById('resultados').innerHTML = '';
+            
+            try {
+                const response = await fetch('/optimizar', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                document.getElementById('spinner').style.display = 'none';
+                
+                if (result.error) {
+                    document.getElementById('resultados').innerHTML = `<div class="error">❌ Error: ${result.error}</div>`;
+                    return;
+                }
+                
+                let html = '<h2>🏆 Top 3 Escenarios</h2>';
+                result.resultados.forEach(r => {
+                    html += `<div class="resultado">`;
+                    html += `<h3>#${r.numero} — ${r.calidad_pct}% (${r.categoria})</h3>`;
+                    html += `<p><strong>Ventana (UTC${r.offset_utc>0?'+':''}${r.offset_utc}):</strong> ${r.inicio.replace('T', ' ')} → ${r.fin.replace('T', ' ')} (${r.duracion_min} min)</p>`;
+                    html += `<p><strong>Aumento recomendado:</strong> ${r.aumento}x</p>`;
+                    if (r.optimo) {
+                        html += `<p><strong>Momento óptimo:</strong> ${r.optimo.hora.replace('T', ' ')} | Alt: ${r.optimo.altitud}° | Az: ${r.optimo.azimut}° | Mag: ${r.optimo.magnitud}</p>`;
+                    }
+                    html += `</div>`;
+                });
+                document.getElementById('resultados').innerHTML = html;
+                
+            } catch (err) {
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('resultados').innerHTML = `<div class="error">❌ Error de conexión</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
