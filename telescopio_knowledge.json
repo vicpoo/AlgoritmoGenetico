@@ -1,0 +1,68 @@
+{
+  "jupiter": [
+    {"apertura_mm": 102, "tipo": "refractor", "aumentos_min": 300, "aumentos_max": 500, "resultado": "regular", "peso": 0.3},
+    {"apertura_mm": 114, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 250, "resultado": "bueno", "peso": 0.7},
+    {"apertura_mm": 130, "tipo": "reflector", "aumentos_min": 100, "aumentos_max": 180, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 250, "tipo": "reflector", "aumentos_min": 300, "aumentos_max": 400, "resultado": "bueno", "peso": 0.6},
+    {"apertura_mm": 114, "tipo": "reflector", "aumentos_min": 50, "aumentos_max": 100, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 235, "tipo": "catadioptrico", "aumentos_min": 250, "aumentos_max": 400, "resultado": "muy_bien", "peso": 0.9}
+  ],
+  "luna": [
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 300, "resultado": "muy_bien", "peso": 0.9},
+    {"apertura_mm": 127, "tipo": "refractor", "aumentos_min": 150, "aumentos_max": 250, "resultado": "muy_bien", "peso": 0.85},
+    {"apertura_mm": 90, "tipo": "refractor", "aumentos_min": 100, "aumentos_max": 180, "resultado": "bien", "peso": 0.7},
+    {"apertura_mm": 80, "tipo": "refractor", "aumentos_min": 80, "aumentos_max": 150, "resultado": "bien", "peso": 0.65},
+    {"apertura_mm": 70, "tipo": "refractor", "aumentos_min": 50, "aumentos_max": 100, "resultado": "regular", "peso": 0.5},
+    {"apertura_mm": 150, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 250, "resultado": "muy_bien", "peso": 0.85}
+  ],
+  "marte": [
+    {"apertura_mm": 254, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 200, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 150, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 152, "tipo": "reflector", "aumentos_min": 120, "aumentos_max": 120, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 300, "aumentos_max": 400, "resultado": "muy_bien", "peso": 0.9},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 250, "aumentos_max": 250, "resultado": "regular", "peso": 0.5}
+  ],
+  "mercurio": [
+    {"apertura_mm": 305, "tipo": "reflector", "aumentos_min": 350, "aumentos_max": 450, "resultado": "bien", "peso": 0.7},
+    {"apertura_mm": 235, "tipo": "refractor", "aumentos_min": 250, "aumentos_max": 300, "resultado": "regular", "peso": 0.5},
+    {"apertura_mm": 127, "tipo": "refractor", "aumentos_min": 250, "aumentos_max": 250, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 90, "tipo": "refractor", "aumentos_min": 120, "aumentos_max": 120, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 150, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 254, "tipo": "reflector", "aumentos_min": 400, "aumentos_max": 400, "resultado": "bien", "peso": 0.7}
+  ],
+  "saturno": [
+    {"apertura_mm": 130, "tipo": "reflector", "aumentos_min": 100, "aumentos_max": 150, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 70, "tipo": "refractor", "aumentos_min": 100, "aumentos_max": 100, "resultado": "mal", "peso": 0.15},
+    {"apertura_mm": 80, "tipo": "refractor", "aumentos_min": 120, "aumentos_max": 180, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 114, "tipo": "reflector", "aumentos_min": 120, "aumentos_max": 180, "resultado": "regular", "peso": 0.45},
+    {"apertura_mm": 130, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 200, "resultado": "bien", "peso": 0.7},
+    {"apertura_mm": 150, "tipo": "reflector", "aumentos_min": 180, "aumentos_max": 250, "resultado": "bien", "peso": 0.75},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 200, "aumentos_max": 300, "resultado": "muy_bien", "peso": 0.9}
+  ],
+  "urano": [
+    {"apertura_mm": 180, "tipo": "catadioptrico", "aumentos_min": 150, "aumentos_max": 200, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 200, "aumentos_max": 250, "resultado": "regular", "peso": 0.45},
+    {"apertura_mm": 130, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 150, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 114, "tipo": "reflector", "aumentos_min": 120, "aumentos_max": 120, "resultado": "mal", "peso": 0.15},
+    {"apertura_mm": 150, "tipo": "reflector", "aumentos_min": 180, "aumentos_max": 220, "resultado": "regular", "peso": 0.5},
+    {"apertura_mm": 250, "tipo": "reflector", "aumentos_min": 250, "aumentos_max": 300, "resultado": "bien", "peso": 0.7}
+  ],
+  "neptuno": [
+    {"apertura_mm": 130, "tipo": "reflector", "aumentos_min": 100, "aumentos_max": 150, "resultado": "regular", "peso": 0.35},
+    {"apertura_mm": 114, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 150, "resultado": "regular", "peso": 0.3},
+    {"apertura_mm": 90, "tipo": "refractor", "aumentos_min": 120, "aumentos_max": 120, "resultado": "regular", "peso": 0.3},
+    {"apertura_mm": 150, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 200, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 200, "aumentos_max": 250, "resultado": "bien", "peso": 0.65},
+    {"apertura_mm": 254, "tipo": "reflector", "aumentos_min": 300, "aumentos_max": 300, "resultado": "bien", "peso": 0.7},
+    {"apertura_mm": 305, "tipo": "reflector", "aumentos_min": 350, "aumentos_max": 350, "resultado": "bien", "peso": 0.75}
+  ],
+  "venus": [
+    {"apertura_mm": 102, "tipo": "refractor", "aumentos_min": 80, "aumentos_max": 120, "resultado": "bien", "peso": 0.65},
+    {"apertura_mm": 90, "tipo": "refractor", "aumentos_min": 90, "aumentos_max": 90, "resultado": "bien", "peso": 0.6},
+    {"apertura_mm": 90, "tipo": "refractor", "aumentos_min": 150, "aumentos_max": 150, "resultado": "regular", "peso": 0.4},
+    {"apertura_mm": 90, "tipo": "refractor", "aumentos_min": 270, "aumentos_max": 270, "resultado": "mal", "peso": 0.2},
+    {"apertura_mm": 130, "tipo": "reflector", "aumentos_min": 100, "aumentos_max": 150, "resultado": "regular", "peso": 0.5},
+    {"apertura_mm": 200, "tipo": "reflector", "aumentos_min": 150, "aumentos_max": 200, "resultado": "bien", "peso": 0.7},
+    {"apertura_mm": 250, "tipo": "reflector", "aumentos_min": 200, "aumentos_max": 200, "resultado": "muy_bien", "peso": 0.85}
+  ]
+}

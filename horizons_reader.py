@@ -1,10 +1,4 @@
 # horizons_reader.py
-"""
-Lector de archivos Horizons para AstroOpti
-Extracción por posiciones de caracteres SIN usar split() para valores numéricos.
-Robusto ante variaciones en el número de tokens.
-"""
-
 import re
 import math
 from pathlib import Path
@@ -176,11 +170,7 @@ class HorizonsReader:
         self.paso_minutos = step_elegido
         print(f"  ⏱️  Paso de datos detectado: {self.paso_minutos} minutos")
 
-    # ------------------------------------------------------------------
-    # Nuevos métodos de extracción por posiciones (sin split)
-    # ------------------------------------------------------------------
     def _obtener_posiciones_columnas(self, contenido: str, idx_soe: int) -> Dict[str, int]:
-        """Busca las posiciones de inicio de las columnas clave en el encabezado."""
         lineas_antes = contenido[:idx_soe].splitlines()
         linea_header = ""
         for linea in reversed(lineas_antes):
@@ -193,36 +183,36 @@ class HorizonsReader:
 
         print(f"  📋 Encabezado detectado (primeros 150 chars):\n     {linea_header[:150]}")
         posiciones = {}
-        # Azimut/Elevación (comparten inicio)
         idx_azi = linea_header.find('Azi')
         if idx_azi != -1:
             posiciones['AZ_EL_start'] = idx_azi
-        # APmag
         idx_apmag = linea_header.find('APmag')
         if idx_apmag != -1:
             posiciones['APmag_start'] = idx_apmag
-        # S-brt
         idx_sbrt = linea_header.find('S-brt')
         if idx_sbrt != -1:
             posiciones['S-brt_start'] = idx_sbrt
-        # Illu%
         idx_illu = linea_header.find('Illu%')
         if idx_illu == -1:
             idx_illu = linea_header.find('Illu')
         if idx_illu != -1:
             posiciones['Illu_start'] = idx_illu
-        # Ang-diam
         idx_ang = linea_header.find('Ang-diam')
         if idx_ang != -1:
             posiciones['Ang-diam_start'] = idx_ang
-        # delta
         idx_delta = linea_header.find('delta')
         if idx_delta != -1:
             posiciones['delta_start'] = idx_delta
+        
+        idx_solar = linea_header.find('Solar')
+        if idx_solar == -1:
+            idx_solar = linea_header.find('sun')
+        if idx_solar != -1:
+            posiciones['solar_start'] = idx_solar
+            
         return posiciones
 
     def _extraer_numero_desde_posicion(self, linea: str, inicio: int) -> Optional[float]:
-        """Extrae el primer número flotante a partir de una posición dada."""
         if inicio >= len(linea):
             return None
         sub = linea[inicio:]
@@ -236,11 +226,9 @@ class HorizonsReader:
         return None
 
     def _extraer_dos_numeros_consecutivos(self, linea: str, inicio: int) -> Tuple[Optional[float], Optional[float]]:
-        """Extrae dos números consecutivos desde una posición (para Az y El)."""
         primero = self._extraer_numero_desde_posicion(linea, inicio)
         if primero is None:
             return None, None
-        # Encontrar dónde termina el primer número
         sub = linea[inicio:]
         patron_num = re.compile(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?')
         match = patron_num.search(sub)
@@ -255,15 +243,9 @@ class HorizonsReader:
         return mag_min <= val <= mag_max
 
     def _buscar_magnitud_corregida(self, linea: str, pos_inicio: int, objeto: str) -> Optional[float]:
-        """
-        Si el número en la posición de APmag no es válido, busca el número más negativo
-        (para la Luna) o el que esté dentro del rango típico.
-        """
-        # Primero probar el valor en la posición esperada
         val = self._extraer_numero_desde_posicion(linea, pos_inicio)
         if val is not None and self._validar_magnitud(val, objeto):
             return val
-        # Si no, buscar en toda la línea el número que mejor se ajuste al rango
         patron = re.compile(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?')
         for match in patron.finditer(linea):
             try:
@@ -272,7 +254,6 @@ class HorizonsReader:
                     return num
             except:
                 continue
-        # Si nada, devolver el valor original (aunque sea inválido)
         return val
 
     def cargar_observaciones(self, debug_filas: int = 0) -> List[Observacion]:
@@ -296,7 +277,6 @@ class HorizonsReader:
         total = len(lineas)
         print(f"  📊 Líneas en bloque de datos: {total}")
 
-        # Ventana de fechas
         if self.paso_minutos > 60:
             margen = timedelta(days=max(4, self.paso_minutos // (60*12)))
             fecha_ini = self.fecha - margen
@@ -318,7 +298,6 @@ class HorizonsReader:
             if not _PATRON_FECHALN.match(linea):
                 continue
 
-            # Extraer fecha/hora usando split SOLO para los dos primeros tokens
             partes_fecha = linea.split()[:2]
             if len(partes_fecha) < 2:
                 continue
@@ -329,22 +308,18 @@ class HorizonsReader:
                 continue
 
             try:
-                # Azimut y Elevación
                 az_el_start = posiciones.get('AZ_EL_start')
                 if az_el_start is None:
                     continue
                 az, el = self._extraer_dos_numeros_consecutivos(linea, az_el_start)
                 if az is None or el is None:
                     continue
-                # Normalizar azimut
                 az = az % 360.0
-                # Validar elevación
                 if el < -90.0 or el > 90.0:
                     if debug_filas:
                         print(f"  ⚠️  Elevación fuera de rango: {el:.2f}° en línea {i}")
                     continue
 
-                # Magnitud APmag (con corrección)
                 apmag_start = posiciones.get('APmag_start')
                 if apmag_start is None:
                     continue
@@ -352,7 +327,6 @@ class HorizonsReader:
                 if apmag is None:
                     continue
 
-                # Opcionales
                 sbrt = 0.0
                 if 'S-brt_start' in posiciones:
                     val = self._extraer_numero_desde_posicion(linea, posiciones['S-brt_start'])
@@ -374,6 +348,12 @@ class HorizonsReader:
                     if val is not None and 0 < val < 50:
                         delta = abs(val)
 
+                elev_solar = -90.0
+                if 'solar_start' in posiciones:
+                    sol_val = self._extraer_numero_desde_posicion(linea, posiciones['solar_start'])
+                    if sol_val is not None and -90 <= sol_val <= 90:
+                        elev_solar = sol_val
+
                 obs = Observacion(
                     timestamp=fecha_obs,
                     azimut=az,
@@ -382,7 +362,8 @@ class HorizonsReader:
                     brillo_superficial=sbrt,
                     iluminacion=illu,
                     angulo_diametro=angdiam,
-                    distancia_au=delta
+                    distancia_au=delta,
+                    elevacion_solar=elev_solar
                 )
                 observaciones.append(obs)
 
@@ -391,6 +372,7 @@ class HorizonsReader:
                     print(f"       UTC : {fecha_obs}")
                     print(f"       AZ  : {az:.4f}° | EL: {el:.4f}°")
                     print(f"       APmag: {apmag:.3f} | Delta: {delta:.6f} UA")
+                    print(f"       Sol : {elev_solar:.1f}°")
                     n_debug += 1
 
             except Exception as e:
