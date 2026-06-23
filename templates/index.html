@@ -5,20 +5,14 @@
     <title>AstroOpti Web</title>
     <style>
         body { font-family: Arial; margin: 20px; background: #0a0f1e; color: #e0e0e0; }
-        .container { max-width: 1200px; margin: auto; background: #1a2332; padding: 25px; border-radius: 10px; }
+        .container { max-width: 900px; margin: auto; background: #1a2332; padding: 25px; border-radius: 10px; }
         input, select, button { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; background: #2a3a4a; color: white; border: 1px solid #4a6a8a; border-radius: 5px; }
         button { background: #3a6a9a; font-weight: bold; cursor: pointer; }
         button:hover { background: #4a8aba; }
         .resultado { background: #0d1520; padding: 15px; margin-top: 20px; border-radius: 8px; border-left: 4px solid #4a8aba; }
         .spinner { display: none; text-align: center; padding: 20px; }
         .error { color: #ff6b6b; padding: 15px; background: #1a0d0d; border-radius: 8px; border-left: 4px solid #f44336; margin-top: 15px; }
-        .graficas-container { margin-top: 30px; padding: 20px; background: #0d1520; border-radius: 8px; }
-        .grafica-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
-        .grafica-card { background: #1a2332; padding: 15px; border-radius: 8px; }
-        .grafica-card h4 { margin: 0 0 10px 0; text-align: center; }
-        canvas { max-width: 100%; background: #0d1520; border-radius: 5px; max-height: 300px; }
 
-        /* Categorías de calidad */
         .excelente { border-left-color: #4caf50; }
         .buena     { border-left-color: #2196f3; }
         .aceptable { border-left-color: #ff9800; }
@@ -30,7 +24,6 @@
         hr { border-color: #2a3a4a; margin: 15px 0; }
         .resultados-grid { display: flex; flex-direction: column; gap: 15px; }
 
-        /* Datos del momento óptimo */
         .datos-objeto { background: #111e2e; padding: 10px 14px; border-radius: 6px; margin-top: 8px; font-size: 0.92em; }
         .datos-objeto p { margin: 4px 0; }
         .badge-lunar { display: inline-block; background: #1e2c3e; border: 1px solid #3a5a7a; padding: 3px 10px; border-radius: 12px; font-size: 0.85em; margin-left: 6px; }
@@ -42,8 +35,9 @@
         .mejores-title { font-size: 1.4em; margin-top: 20px; margin-bottom: 10px; color: #4a8aba; }
         .aviso { color: #ffaa66; font-size: 0.9em; margin-top: 6px; }
         .seccion-titulo { color: #7ab8e0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 4px; }
+        .hora-loc { color: #7ab8e0; }
+        .hora-utc { color: #8aa; font-size: 0.85em; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="container">
@@ -69,7 +63,7 @@
         <h3>📅 Fecha</h3>
         <div class="form-group">
             <label>Fecha (UTC):</label>
-            <input type="date" name="fecha" value="2026-01-06" required>
+            <input type="date" name="fecha" value="2026-06-22" required>
         </div>
 
         <h3>🔭 Equipo</h3>
@@ -134,89 +128,15 @@
 
     <div class="spinner" id="spinner">⏳ Procesando... (puede tardar hasta 1 minuto)</div>
     <div id="resultados"></div>
-
-    <div class="graficas-container" id="graficas-container" style="display:none;">
-        <h3>📈 Evolución del Algoritmo Genético</h3>
-        <div class="grafica-grid">
-            <div class="grafica-card">
-                <h4>🎯 Fitness — Mejor vs Promedio</h4>
-                <canvas id="fitnessChart"></canvas>
-            </div>
-            <div class="grafica-card">
-                <h4>📊 Diversidad de Población</h4>
-                <canvas id="diversidadChart"></canvas>
-            </div>
-            <div class="grafica-card">
-                <h4>⏱️ Duración de la mejor ventana</h4>
-                <canvas id="duracionChart"></canvas>
-            </div>
-            <div class="grafica-card">
-                <h4>🔭 Aumento del mejor individuo</h4>
-                <canvas id="aumentoChart"></canvas>
-            </div>
-        </div>
-
-        <div class="grafica-card" style="margin-top: 20px;">
-            <h4>📋 Variables de la Mejor Solución</h4>
-            <table class="tabla-variables">
-                <thead><tr><th>Variable</th><th>Valor Óptimo</th></tr></thead>
-                <tbody>
-                    <tr><td>Inicio de ventana</td><td id="var-inicio">—</td></tr>
-                    <tr><td>Fin de ventana</td><td id="var-fin">—</td></tr>
-                    <tr><td>Duración (min)</td><td id="var-duracion">—</td></tr>
-                    <tr><td>Altitud óptima (°)</td><td id="var-altitud">—</td></tr>
-                    <tr><td>Azimut óptimo (°)</td><td id="var-azimut">—</td></tr>
-                    <tr><td>Aumento recomendado</td><td id="var-aumento">—</td></tr>
-                    <tr><td>Magnitud aparente</td><td id="var-magnitud">—</td></tr>
-                    <tr><td>Fase iluminada del objeto</td><td id="var-fase-objeto">—</td></tr>
-                    <tr><td>Distancia a la Tierra (AU)</td><td id="var-dist-tierra">—</td></tr>
-                    <tr><td>Distancia al Sol (AU)</td><td id="var-dist-sol">—</td></tr>
-                    <tr><td>Condición lunar del cielo</td><td id="var-luna-cielo">—</td></tr>
-                    <tr><td>Fitness (%)</td><td id="var-fitness">—</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
 
 <script>
-    let charts = {};
-
-    function destroyChart(id) {
-        if (charts[id]) { charts[id].destroy(); delete charts[id]; }
-    }
-
-    function makeChart(id, label, data, labels, color, yLabel) {
-        destroyChart(id);
-        const ctx = document.getElementById(id).getContext('2d');
-        charts[id] = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{ label, data, borderColor: color,
-                    backgroundColor: color.replace(')', ', 0.1)').replace('rgb', 'rgba'),
-                    borderWidth: 2, fill: true, tension: 0.3 }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: true,
-                plugins: { legend: { labels: { color: '#e0e0e0' } } },
-                scales: {
-                    x: { title: { display: true, text: 'Generación', color: '#e0e0e0' },
-                         grid: { color: '#2a3a4a' }, ticks: { color: '#e0e0e0' } },
-                    y: { title: { display: true, text: yLabel, color: '#e0e0e0' },
-                         grid: { color: '#2a3a4a' }, ticks: { color: '#e0e0e0' } }
-                }
-            }
-        });
-    }
-
     document.getElementById('form-optimizar').addEventListener('submit', async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target).entries());
 
         document.getElementById('spinner').style.display = 'block';
         document.getElementById('resultados').innerHTML = '';
-        document.getElementById('graficas-container').style.display = 'none';
 
         try {
             const resp   = await fetch('/optimizar', {
@@ -234,34 +154,42 @@
             }
 
             // ── Renderizar escenarios ──────────────────────────────────
-            let html = `<h2 class="mejores-title">🏆 3 Mejores Escenarios</h2>
+            let html = `<h2 class="mejores-title">🏆 Mejor Escenario</h2>
                         <div class="resultados-grid">`;
 
-            result.resultados.forEach((r, idx) => {
+            // Mostrar solo el primer resultado (el mejor)
+            const r = result.resultados[0];
+            if (r) {
                 const cls = { EXCELENTE:'excelente', BUENA:'buena',
                               ACEPTABLE:'aceptable', MALA:'mala' }[r.categoria] || 'mala';
                 const sign = r.offset_utc >= 0 ? '+' : '';
 
+                // Formatear fechas
+                const inicio = r.inicio.replace('T',' ');
+                const fin = r.fin.replace('T',' ');
+
                 html += `<div class="resultado ${cls}">
                     <h3>#${r.numero} — ${r.calidad_pct}% (${r.categoria})</h3>
                     <p><strong>Ventana (UTC${sign}${r.offset_utc}):</strong>
-                       ${r.inicio.replace('T',' ')} → ${r.fin.replace('T',' ')}
+                       ${inicio} → ${fin}
                        (${r.duracion_min} min)</p>
                     <p><strong>Aumento recomendado:</strong> ${r.aumento}x</p>`;
 
-                // Condición lunar del cielo (siempre visible, es independiente del objeto)
                 html += `<p><strong>Condición lunar del cielo:</strong>
                     <span class="badge-lunar">${r.fase_lunar_cielo || '—'}</span></p>`;
 
                 if (r.optimo) {
                     const o = r.optimo;
+                    const horaLoc = o.hora_loc.replace('T',' ');
+                    const horaUtc = o.hora_utc.replace('T',' ');
+                    
                     html += `<div class="datos-objeto">
                         <p class="seccion-titulo">Momento óptimo</p>
-                        <p><strong>Hora:</strong> ${o.hora.replace('T',' ')}</p>
+                        <p><strong>Hora LOC:</strong> <span class="hora-loc">${horaLoc}</span></p>
+                        <p><strong>Hora UTC:</strong> <span class="hora-utc">${horaUtc}</span></p>
                         <p><strong>Posición:</strong> Alt: ${o.altitud}° | Az: ${o.azimut}°</p>
                         <p><strong>Magnitud:</strong> ${o.magnitud}</p>`;
 
-                    // Fase del objeto (disco iluminado) — etiqueta según el objeto
                     const esLuna = r.objeto === 'luna';
                     const labelFase = esLuna ? 'Fase lunar (disco)' : 'Disco iluminado del objeto';
                     html += `<p><strong>${labelFase}:</strong>
@@ -269,7 +197,6 @@
 
                     html += `<p><strong>Diámetro angular:</strong> ${o.diametro}"</p>`;
 
-                    // Distancias con etiquetas claras
                     if (o.distancia_tierra_au && o.distancia_tierra_au > 0) {
                         html += `<p><strong>Distancia a la Tierra:</strong> ${o.distancia_tierra_au} AU</p>`;
                     }
@@ -286,85 +213,10 @@
                 }
 
                 html += `</div>`;
-
-                // Poblar tabla con el mejor escenario
-                if (idx === 0 && r.optimo) {
-                    const o = r.optimo;
-                    document.getElementById('var-inicio').textContent     = r.inicio.replace('T',' ');
-                    document.getElementById('var-fin').textContent         = r.fin.replace('T',' ');
-                    document.getElementById('var-duracion').textContent    = r.duracion_min + ' min';
-                    document.getElementById('var-altitud').textContent     = o.altitud + '°';
-                    document.getElementById('var-azimut').textContent      = o.azimut + '°';
-                    document.getElementById('var-aumento').textContent     = r.aumento + 'x';
-                    document.getElementById('var-magnitud').textContent    = o.magnitud;
-                    document.getElementById('var-fase-objeto').textContent = o.fase_objeto_pct + '%';
-                    document.getElementById('var-dist-tierra').textContent =
-                        o.distancia_tierra_au ? o.distancia_tierra_au + ' AU' : '—';
-                    document.getElementById('var-dist-sol').textContent    =
-                        o.distancia_sol_au    ? o.distancia_sol_au    + ' AU' : '—';
-                    document.getElementById('var-luna-cielo').textContent  = r.fase_lunar_cielo || '—';
-                    document.getElementById('var-fitness').textContent     = r.calidad_pct + '%';
-                }
-            });
+            }
 
             html += '</div>';
             document.getElementById('resultados').innerHTML = html;
-
-            // ── Gráficas ───────────────────────────────────────────────
-            const conv = result.convergencia;
-            if (conv && conv.mejor && conv.mejor.length > 0) {
-                document.getElementById('graficas-container').style.display = 'block';
-
-                const gens      = conv.mejor.map((_, i) => i + 1);
-                const mejorData = conv.mejor.map(v => +(v * 100).toFixed(2));
-                const promData  = conv.promedio.map(v => +(v * 100).toFixed(2));
-                const divData   = mejorData.map((m, i) => +(Math.abs(m - promData[i])).toFixed(2));
-
-                // Gráfica 1: Fitness dual
-                destroyChart('fitnessChart');
-                const ctx1 = document.getElementById('fitnessChart').getContext('2d');
-                charts['fitnessChart'] = new Chart(ctx1, {
-                    type: 'line',
-                    data: {
-                        labels: gens,
-                        datasets: [
-                            { label: 'Mejor Fitness', data: mejorData,
-                              borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.1)',
-                              borderWidth: 2, fill: true, tension: 0.3 },
-                            { label: 'Promedio', data: promData,
-                              borderColor: '#2196f3', backgroundColor: 'rgba(33,150,243,0.1)',
-                              borderWidth: 2, fill: true, tension: 0.3 }
-                        ]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: true,
-                        plugins: { legend: { position: 'top', labels: { color: '#e0e0e0' } } },
-                        scales: {
-                            x: { title: { display: true, text: 'Generación', color: '#e0e0e0' },
-                                 grid: { color: '#2a3a4a' }, ticks: { color: '#e0e0e0' } },
-                            y: { title: { display: true, text: 'Fitness (%)', color: '#e0e0e0' },
-                                 min: 0, max: 100,
-                                 grid: { color: '#2a3a4a' }, ticks: { color: '#e0e0e0' } }
-                        }
-                    }
-                });
-
-                // Gráfica 2: Diversidad
-                makeChart('diversidadChart', 'Diversidad (Δ Fitness)', divData, gens,
-                          'rgb(255,152,0)', 'Δ Fitness (%)');
-
-                // Gráfica 3: Duración real
-                const durData = (conv.duracion && conv.duracion.length > 0)
-                    ? conv.duracion : gens.map(() => 0);
-                makeChart('duracionChart', 'Duración óptima (min)', durData, gens,
-                          'rgb(156,39,176)', 'Minutos');
-
-                // Gráfica 4: Aumento real
-                const aumData = (conv.aumento && conv.aumento.length > 0)
-                    ? conv.aumento : gens.map(() => 0);
-                makeChart('aumentoChart', 'Aumento óptimo (x)', aumData, gens,
-                          'rgb(0,188,212)', 'Aumentos (x)');
-            }
 
         } catch (err) {
             document.getElementById('spinner').style.display = 'none';

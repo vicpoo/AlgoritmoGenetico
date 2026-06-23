@@ -192,15 +192,22 @@ class HorizonsReader:
         idx_sbrt = linea_header.find('S-brt')
         if idx_sbrt != -1:
             posiciones['S-brt_start'] = idx_sbrt
+        
+        # ── CORRECCIÓN: Buscar Illu% exactamente ──────────────────────
         idx_illu = linea_header.find('Illu%')
         if idx_illu == -1:
-            idx_illu = linea_header.find('Illu')
+            # Fallback: buscar con espacio
+            idx_illu = linea_header.find(' Illu% ')
+            if idx_illu == -1:
+                # Último recurso: buscar Illu (pero NO Def_illu)
+                idx_illu = linea_header.find(' Illu ')
         if idx_illu != -1:
             posiciones['Illu_start'] = idx_illu
+            
         idx_ang = linea_header.find('Ang-diam')
         if idx_ang != -1:
             posiciones['Ang-diam_start'] = idx_ang
-        idx_delta = linea_header.find('delta')
+        idx_delta = linea_header.find(' delta ')
         if idx_delta != -1:
             posiciones['delta_start'] = idx_delta
         
@@ -332,11 +339,23 @@ class HorizonsReader:
                     val = self._extraer_numero_desde_posicion(linea, posiciones['S-brt_start'])
                     if val is not None and 0 <= val <= 15:
                         sbrt = val
+                
+                # ── CORRECCIÓN: Leer Illu% correctamente ──────────────
                 illu = 0.0
                 if 'Illu_start' in posiciones:
                     val = self._extraer_numero_desde_posicion(linea, posiciones['Illu_start'])
                     if val is not None and 0 <= val <= 100:
                         illu = val
+                    else:
+                        # Intentar buscar específicamente Illu% en la línea
+                        import re
+                        match = re.search(r'Illu%\s+(\d+\.\d+)', linea)
+                        if match:
+                            try:
+                                illu = float(match.group(1))
+                            except:
+                                pass
+                
                 angdiam = 0.0
                 if 'Ang-diam_start' in posiciones:
                     val = self._extraer_numero_desde_posicion(linea, posiciones['Ang-diam_start'])
@@ -371,7 +390,8 @@ class HorizonsReader:
                     print(f"\n  🔎 DEBUG #{n_debug+1}:")
                     print(f"       UTC : {fecha_obs}")
                     print(f"       AZ  : {az:.4f}° | EL: {el:.4f}°")
-                    print(f"       APmag: {apmag:.3f} | Delta: {delta:.6f} UA")
+                    print(f"       APmag: {apmag:.3f} | Illu%: {illu:.2f}%")
+                    print(f"       Delta: {delta:.6f} UA")
                     print(f"       Sol : {elev_solar:.1f}°")
                     n_debug += 1
 
