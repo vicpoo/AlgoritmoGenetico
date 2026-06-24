@@ -20,7 +20,7 @@ Cambios respecto a la versión web:
 import traceback
 from datetime import datetime, timedelta
 
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 
 from astroopti_core import AstroOptiCore
@@ -149,6 +149,14 @@ def _validar_payload(data: dict):
 # ──────────────────────────────────────────────────────────────────────────
 # Endpoints
 # ──────────────────────────────────────────────────────────────────────────
+
+@app.route('/', methods=['GET'])
+def index():
+    """Sirve la web (mismo diseño visual que la app Flutter). La API
+    JSON usada por Flutter (/health, /objetos, /optimizar) sigue
+    funcionando exactamente igual, sin cambios."""
+    return render_template('index.html', objetos=config.objetos_soportados)
+
 
 @app.route('/health', methods=['GET'])
 def health():

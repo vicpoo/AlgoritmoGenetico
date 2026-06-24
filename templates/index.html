@@ -1,229 +1,757 @@
-<!--index.html-->
+<!--templates/index.html-->
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>AstroOpti Web</title>
-    <style>
-        body { font-family: Arial; margin: 20px; background: #0a0f1e; color: #e0e0e0; }
-        .container { max-width: 900px; margin: auto; background: #1a2332; padding: 25px; border-radius: 10px; }
-        input, select, button { padding: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; background: #2a3a4a; color: white; border: 1px solid #4a6a8a; border-radius: 5px; }
-        button { background: #3a6a9a; font-weight: bold; cursor: pointer; }
-        button:hover { background: #4a8aba; }
-        .resultado { background: #0d1520; padding: 15px; margin-top: 20px; border-radius: 8px; border-left: 4px solid #4a8aba; }
-        .spinner { display: none; text-align: center; padding: 20px; }
-        .error { color: #ff6b6b; padding: 15px; background: #1a0d0d; border-radius: 8px; border-left: 4px solid #f44336; margin-top: 15px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroOpti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DISEÑO: misma identidad visual que la app Flutter — consola
+   de telemetría de misión, no "espacio decorativo". Paleta y
+   tipografía calcadas de mission_colors.dart / mission_typography.dart.
+   ============================================================ */
 
-        .excelente { border-left-color: #4caf50; }
-        .buena     { border-left-color: #2196f3; }
-        .aceptable { border-left-color: #ff9800; }
-        .mala      { border-left-color: #f44336; }
+:root {
+    --void-black: #05070D;
+    --panel: #0E1622;
+    --panel-raised: #141F2E;
+    --hairline: #22303F;
 
-        .form-group { margin-bottom: 10px; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-        small { color: #8aa; font-size: 0.8em; display: block; }
-        hr { border-color: #2a3a4a; margin: 15px 0; }
-        .resultados-grid { display: flex; flex-direction: column; gap: 15px; }
+    --text-primary: #E8EDF2;
+    --text-secondary: #8AA0B4;
+    --text-dim: #536074;
 
-        .datos-objeto { background: #111e2e; padding: 10px 14px; border-radius: 6px; margin-top: 8px; font-size: 0.92em; }
-        .datos-objeto p { margin: 4px 0; }
-        .badge-lunar { display: inline-block; background: #1e2c3e; border: 1px solid #3a5a7a; padding: 3px 10px; border-radius: 12px; font-size: 0.85em; margin-left: 6px; }
-        .badge-objeto { display: inline-block; background: #1e3a2e; border: 1px solid #2a6a4a; padding: 3px 10px; border-radius: 12px; font-size: 0.85em; margin-left: 6px; }
+    --phosphor: #7FE7C4;
+    --phosphor-dim: #3D7A66;
+    --data-blue: #3D8FD6;
+    --amber: #FF8A4C;
+    --critical-red: #FF5252;
 
-        .tabla-variables { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .tabla-variables td, .tabla-variables th { padding: 8px; text-align: left; border-bottom: 1px solid #2a3a4a; }
-        .tabla-variables th { color: #4a8aba; }
-        .mejores-title { font-size: 1.4em; margin-top: 20px; margin-bottom: 10px; color: #4a8aba; }
-        .aviso { color: #ffaa66; font-size: 0.9em; margin-top: 6px; }
-        .seccion-titulo { color: #7ab8e0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 4px; }
-        .hora-loc { color: #7ab8e0; }
-        .hora-utc { color: #8aa; font-size: 0.85em; }
-    </style>
+    --font-display: 'Oxanium', sans-serif;
+    --font-data: 'JetBrains Mono', monospace;
+    --font-body: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    margin: 0;
+    background: var(--void-black);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 16px 48px;
+}
+
+/* ── AppBar ─────────────────────────────────────────────────── */
+
+.appbar {
+    padding: 22px 4px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.appbar-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--phosphor);
+    box-shadow: 0 0 6px var(--phosphor);
+    flex-shrink: 0;
+}
+
+.appbar-title-row h1 {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.appbar-subtitle {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    padding-left: 18px;
+}
+
+/* ── Panel de instrumento ───────────────────────────────────── */
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    margin-bottom: 14px;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.panel-code {
+    font-family: var(--font-data);
+    font-size: 12px;
+    color: var(--phosphor-dim);
+    flex-shrink: 0;
+}
+
+.panel-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    flex: 1;
+}
+
+.panel-trailing {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--data-blue);
+}
+
+.panel-body {
+    padding: 14px;
+}
+
+/* ── Campos de formulario ───────────────────────────────────── */
+
+.field-label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.field-row {
+    display: flex;
+    gap: 12px;
+}
+
+.field-row > * { flex: 1; min-width: 0; }
+
+.field-group {
+    margin-bottom: 14px;
+}
+.field-group:last-child { margin-bottom: 0; }
+
+input[type="number"],
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    background: var(--panel-raised);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-family: var(--font-data);
+    font-size: 14px;
+    padding: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+}
+
+input::placeholder { color: var(--text-dim); }
+
+input:focus, select:focus {
+    border-color: var(--phosphor);
+    border-width: 1.4px;
+}
+
+select {
+    font-family: var(--font-body);
+    font-size: 14px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237FE7C4' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+select option {
+    background: var(--panel-raised);
+    color: var(--text-primary);
+}
+
+small.helper {
+    display: block;
+    color: var(--text-dim);
+    font-size: 11.5px;
+    margin-top: 5px;
+}
+
+.input-suffix-wrap {
+    position: relative;
+}
+.input-suffix-wrap input { padding-right: 32px; }
+.input-suffix {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 11px;
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+/* ── Botón principal ────────────────────────────────────────── */
+
+.btn-optimizar {
+    width: 100%;
+    background: var(--phosphor);
+    color: var(--void-black);
+    border: none;
+    border-radius: 4px;
+    padding: 16px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin: 20px 0 28px;
+}
+
+.btn-optimizar:hover:not(:disabled) { background: #98edd0; }
+.btn-optimizar:disabled {
+    background: var(--phosphor-dim);
+    color: rgba(5,7,13,0.6);
+    cursor: not-allowed;
+}
+
+/* ── Scanning indicator (estado de carga) ───────────────────── */
+
+.scanning-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px 0;
+}
+
+.scanning-rail {
+    width: 220px;
+    height: 3px;
+    background: var(--hairline);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.scanning-beam {
+    position: absolute;
+    width: 60px;
+    height: 3px;
+    top: 0;
+    left: -60px;
+    background: linear-gradient(90deg, transparent, var(--phosphor), transparent);
+    animation: scan 1.4s linear infinite;
+}
+
+@keyframes scan {
+    0%   { left: -60px; }
+    100% { left: 220px; }
+}
+
+.scanning-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+/* ── Gauge de calidad (elemento de firma) ───────────────────── */
+
+.gauge-top-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.gauge-number {
+    font-family: var(--font-data);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.gauge-percent-sign {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.gauge-badge {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+}
+
+.gauge-segments {
+    display: flex;
+    gap: 3px;
+    height: 14px;
+}
+
+.gauge-segment {
+    flex: 1;
+    border-radius: 1.5px;
+    background: var(--hairline);
+    transition: background 0.2s;
+}
+
+.gauge-segment.activo {
+    box-shadow: 0 0 4px currentColor;
+}
+
+/* ── Data readouts ──────────────────────────────────────────── */
+
+.readout-row {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.readout {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 64px;
+}
+
+.readout-label {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.readout-value {
+    font-family: var(--font-data);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.divider {
+    height: 1px;
+    background: var(--hairline);
+    margin: 18px 0 14px;
+}
+
+.subsection-label {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* ── Banner de aviso / error ─────────────────────────────────── */
+
+.banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 4px;
+    margin-top: 16px;
+}
+
+.banner-amber {
+    background: rgba(255,138,76,0.08);
+    border: 1px solid rgba(255,138,76,0.4);
+    color: var(--amber);
+}
+
+.banner-error {
+    background: rgba(255,82,82,0.08);
+    border: 1px solid rgba(255,82,82,0.5);
+}
+
+.banner-icon { flex-shrink: 0; font-size: 16px; line-height: 1.4; }
+
+.banner-error-title {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: var(--critical-red);
+    text-transform: uppercase;
+    margin: 0 0 4px;
+}
+
+.banner p { margin: 0; font-size: 13px; line-height: 1.4; }
+.banner-amber p { font-size: 12.5px; }
+
+/* ── Sección de resultados ──────────────────────────────────── */
+
+.resultado-titulo {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0 0 12px;
+}
+
+.texto-vacio {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+#resultados { display: none; }
+#resultados.visible { display: block; }
+
+@media (max-width: 480px) {
+    .gauge-number { font-size: 32px; }
+    .readout-row { gap: 16px; }
+}
+</style>
 </head>
 <body>
-<div class="container">
-    <h1>🚀 AstroOpti</h1>
-    <p>Optimizador de observación astronómica</p>
+<div class="app-shell">
+
+    <div class="appbar">
+        <div class="appbar-title-row">
+            <span class="status-dot"></span>
+            <h1>ASTROOPTI</h1>
+        </div>
+        <span class="appbar-subtitle">Optimizador de observación astronómica</span>
+    </div>
 
     <form id="form-optimizar">
-        <h3>📍 Ubicación</h3>
-        <div class="form-group">
-            <label>Latitud:</label>
-            <input type="number" step="any" name="latitud" value="16.7821" required>
-        </div>
-        <div class="form-group">
-            <label>Longitud:</label>
-            <input type="number" step="any" name="longitud" value="-93.0900" required>
-        </div>
-        <div class="form-group">
-            <label>Offset UTC:</label>
-            <input type="number" name="offset_utc" value="-6">
-            <small>México Centro: -6 | México Pacífico: -7 | CDMX: -6</small>
+
+        <!-- Panel 01 — Ubicación -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-code">01</span>
+                <span class="panel-title">Ubicación</span>
+            </div>
+            <div class="panel-body">
+                <div class="field-row field-group">
+                    <div>
+                        <label class="field-label">Latitud</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" step="any" name="latitud" value="16.7821" required>
+                            <span class="input-suffix">°</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="field-label">Longitud</label>
+                        <div class="input-suffix-wrap">
+                            <input type="number" step="any" name="longitud" value="-93.0900" required>
+                            <span class="input-suffix">°</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Offset UTC</label>
+                    <div class="input-suffix-wrap">
+                        <input type="number" name="offset_utc" value="-6">
+                        <span class="input-suffix">h</span>
+                    </div>
+                    <small class="helper">México Centro: -6 · México Pacífico: -7 · CDMX: -6</small>
+                </div>
+            </div>
         </div>
 
-        <h3>📅 Fecha</h3>
-        <div class="form-group">
-            <label>Fecha (UTC):</label>
-            <input type="date" name="fecha" value="2026-06-22" required>
+        <!-- Panel 02 — Fecha -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-code">02</span>
+                <span class="panel-title">Fecha (UTC)</span>
+            </div>
+            <div class="panel-body">
+                <input type="date" name="fecha" value="2026-06-22" required>
+            </div>
         </div>
 
-        <h3>🔭 Equipo</h3>
-        <div class="form-group">
-            <label>Objeto a observar:</label>
-            <select name="objeto">
-                {% for obj in objetos %}
-                <option value="{{ obj }}">{{ obj.capitalize() }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Tipo de telescopio:</label>
-            <select name="tipo_telescopio">
-                <option value="reflector">Reflector</option>
-                <option value="refractor">Refractor</option>
-                <option value="catadioptrico">Catadióptrico</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Apertura (mm):</label>
-            <input type="number" name="apertura_mm" value="200">
-        </div>
-        <div class="form-group">
-            <label>Aumentos disponibles (separados por coma):</label>
-            <input type="text" name="aumentos" value="50,100,150,200,250,300">
-        </div>
-
-        <h3>🌙 Condiciones del cielo</h3>
-        <div class="form-group">
-            <label>Fase lunar (condición del cielo nocturno):</label>
-            <select name="fase_lunar">
-                <option value="nueva">🌑 Luna nueva — Excelente para planetas</option>
-                <option value="creciente_inicial">🌒 Creciente inicial — Muy bueno</option>
-                <option value="cuarto_creciente">🌓 Cuarto creciente — Aceptable</option>
-                <option value="gibosa_creciente">🌔 Gibosa creciente — Malo</option>
-                <option value="llena">🌕 Luna llena — Muy malo para planetas</option>
-                <option value="gibosa_menguante">🌖 Gibosa menguante — Malo</option>
-                <option value="cuarto_menguante">🌗 Cuarto menguante — Aceptable</option>
-                <option value="menguante_inicial">🌘 Menguante inicial — Muy bueno</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Estado del cielo:</label>
-            <select name="estado_cielo">
-                <option value="despejado">Despejado</option>
-                <option value="parcialmente_nublado">Parcialmente nublado</option>
-                <option value="nublado">Nublado</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Seeing (turbulencia atmosférica):</label>
-            <select name="seeing">
-                <option value="bueno">Bueno — Estrellas fijas y estables</option>
-                <option value="regular">Regular — Algo de turbulencia</option>
-                <option value="malo">Malo — Imagen inestable</option>
-            </select>
+        <!-- Panel 03 — Equipo -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-code">03</span>
+                <span class="panel-title">Equipo</span>
+            </div>
+            <div class="panel-body">
+                <div class="field-group">
+                    <label class="field-label">Objeto a observar</label>
+                    <select name="objeto">
+                        {% for obj in objetos %}
+                        <option value="{{ obj }}">{{ obj.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Tipo de telescopio</label>
+                    <select name="tipo_telescopio">
+                        <option value="reflector">Reflector</option>
+                        <option value="refractor">Refractor</option>
+                        <option value="catadioptrico">Catadióptrico</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Apertura</label>
+                    <div class="input-suffix-wrap">
+                        <input type="number" name="apertura_mm" value="200">
+                        <span class="input-suffix">mm</span>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Aumentos disponibles</label>
+                    <input type="text" name="aumentos" value="50,100,150,200,250,300">
+                    <small class="helper">Separados por coma</small>
+                </div>
+            </div>
         </div>
 
-        <button type="submit">✨ Optimizar observación</button>
+        <!-- Panel 04 — Condiciones del cielo -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-code">04</span>
+                <span class="panel-title">Condiciones del cielo</span>
+            </div>
+            <div class="panel-body">
+                <div class="field-group">
+                    <label class="field-label">Fase lunar</label>
+                    <select name="fase_lunar">
+                        <option value="nueva">🌑 Luna nueva — Excelente para planetas</option>
+                        <option value="creciente_inicial">🌒 Creciente inicial — Muy bueno</option>
+                        <option value="cuarto_creciente">🌓 Cuarto creciente — Aceptable</option>
+                        <option value="gibosa_creciente">🌔 Gibosa creciente — Malo</option>
+                        <option value="llena">🌕 Luna llena — Muy malo para planetas</option>
+                        <option value="gibosa_menguante">🌖 Gibosa menguante — Malo</option>
+                        <option value="cuarto_menguante">🌗 Cuarto menguante — Aceptable</option>
+                        <option value="menguante_inicial">🌘 Menguante inicial — Muy bueno</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Estado del cielo</label>
+                    <select name="estado_cielo">
+                        <option value="despejado">Despejado</option>
+                        <option value="parcialmente_nublado">Parcialmente nublado</option>
+                        <option value="nublado">Nublado</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Seeing</label>
+                    <select name="seeing">
+                        <option value="bueno">Bueno · estrellas fijas</option>
+                        <option value="regular">Regular · algo de turbulencia</option>
+                        <option value="malo">Malo · imagen inestable</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-optimizar" id="btn-submit">Optimizar observación</button>
     </form>
 
-    <div class="spinner" id="spinner">⏳ Procesando... (puede tardar hasta 1 minuto)</div>
+    <div class="scanning-wrap" id="scanning" style="display:none;">
+        <div class="scanning-rail"><div class="scanning-beam"></div></div>
+        <span class="scanning-label">Calculando trayectoria óptima</span>
+    </div>
+
     <div id="resultados"></div>
+
 </div>
 
 <script>
-    document.getElementById('form-optimizar').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(e.target).entries());
+const COLOR_CATEGORIA = {
+    EXCELENTE: 'var(--phosphor)',
+    BUENA:     'var(--data-blue)',
+    ACEPTABLE: 'var(--amber)',
+    MALA:      'var(--critical-red)',
+};
 
-        document.getElementById('spinner').style.display = 'block';
-        document.getElementById('resultados').innerHTML = '';
+function gaugeHtml(calidadPct, categoria) {
+    const color = COLOR_CATEGORIA[categoria] || 'var(--critical-red)';
+    const total = 24;
+    const activos = Math.max(0, Math.min(total, Math.round((calidadPct / 100) * total)));
 
-        try {
-            const resp   = await fetch('/optimizar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await resp.json();
-            document.getElementById('spinner').style.display = 'none';
+    let segmentos = '';
+    for (let i = 0; i < total; i++) {
+        const activo = i < activos;
+        segmentos += `<div class="gauge-segment${activo ? ' activo' : ''}" style="${activo ? `background:${color}; color:${color};` : ''}"></div>`;
+    }
 
-            if (result.error) {
-                document.getElementById('resultados').innerHTML =
-                    `<div class="error">❌ Error: ${result.error}</div>`;
-                return;
-            }
+    return `
+        <div class="gauge-top-row" style="color:${color};">
+            <span class="gauge-number">${calidadPct.toFixed(0)}</span>
+            <span class="gauge-percent-sign">%</span>
+            <span class="gauge-badge">${categoria}</span>
+        </div>
+        <div class="gauge-segments">${segmentos}</div>
+    `;
+}
 
-            // ── Renderizar escenarios ──────────────────────────────────
-            let html = `<h2 class="mejores-title">🏆 Mejor Escenario</h2>
-                        <div class="resultados-grid">`;
+function readout(label, value, color) {
+    return `<div class="readout">
+        <span class="readout-label">${label}</span>
+        <span class="readout-value" style="${color ? `color:${color};` : ''}">${value}</span>
+    </div>`;
+}
 
-            // Mostrar solo el primer resultado (el mejor)
-            const r = result.resultados[0];
-            if (r) {
-                const cls = { EXCELENTE:'excelente', BUENA:'buena',
-                              ACEPTABLE:'aceptable', MALA:'mala' }[r.categoria] || 'mala';
-                const sign = r.offset_utc >= 0 ? '+' : '';
+function formatFechaCorta(isoStr) {
+    const d = new Date(isoStr);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mi = String(d.getMinutes()).padStart(2, '0');
+    return `${dd}/${mm} ${hh}:${mi}`;
+}
 
-                // Formatear fechas
-                const inicio = r.inicio.replace('T',' ');
-                const fin = r.fin.replace('T',' ');
+function renderResultado(r) {
+    const mo = r.optimo;
 
-                html += `<div class="resultado ${cls}">
-                    <h3>#${r.numero} — ${r.calidad_pct}% (${r.categoria})</h3>
-                    <p><strong>Ventana (UTC${sign}${r.offset_utc}):</strong>
-                       ${inicio} → ${fin}
-                       (${r.duracion_min} min)</p>
-                    <p><strong>Aumento recomendado:</strong> ${r.aumento}x</p>`;
+    let html = `<h2 class="resultado-titulo">Mejor escenario</h2>`;
+    html += `<div class="panel">`;
+    html += `<div class="panel-header">
+                <span class="panel-code">#${r.numero}</span>
+                <span class="panel-title">Ventana de observación</span>
+                <span class="panel-trailing">${r.objeto.toUpperCase()}</span>
+              </div>`;
+    html += `<div class="panel-body">`;
 
-                html += `<p><strong>Condición lunar del cielo:</strong>
-                    <span class="badge-lunar">${r.fase_lunar_cielo || '—'}</span></p>`;
+    html += gaugeHtml(r.calidad_pct, r.categoria);
 
-                if (r.optimo) {
-                    const o = r.optimo;
-                    const horaLoc = o.hora_loc.replace('T',' ');
-                    const horaUtc = o.hora_utc.replace('T',' ');
-                    
-                    html += `<div class="datos-objeto">
-                        <p class="seccion-titulo">Momento óptimo</p>
-                        <p><strong>Hora LOC:</strong> <span class="hora-loc">${horaLoc}</span></p>
-                        <p><strong>Hora UTC:</strong> <span class="hora-utc">${horaUtc}</span></p>
-                        <p><strong>Posición:</strong> Alt: ${o.altitud}° | Az: ${o.azimut}°</p>
-                        <p><strong>Magnitud:</strong> ${o.magnitud}</p>`;
+    html += `<div class="divider"></div>`;
+    html += `<div class="readout-row">`;
+    html += readout('INICIO LOC', formatFechaCorta(r.inicio));
+    html += readout('DURACIÓN', `${Math.round(r.duracion_min)} min`);
+    html += readout('AUMENTO', `${r.aumento}x`, 'var(--phosphor)');
+    html += `</div>`;
 
-                    const esLuna = r.objeto === 'luna';
-                    const labelFase = esLuna ? 'Fase lunar (disco)' : 'Disco iluminado del objeto';
-                    html += `<p><strong>${labelFase}:</strong>
-                        <span class="badge-objeto">${o.fase_objeto_pct}%</span></p>`;
+    if (mo) {
+        html += `<div class="divider"></div>`;
+        html += `<span class="subsection-label">Momento óptimo</span>`;
+        html += `<div class="readout-row" style="margin-bottom:14px;">`;
+        html += readout('ALT', `${mo.altitud.toFixed(1)}°`);
+        html += readout('AZ', `${mo.azimut.toFixed(1)}°`);
+        html += readout('MAG', mo.magnitud.toFixed(2));
+        html += `</div>`;
 
-                    html += `<p><strong>Diámetro angular:</strong> ${o.diametro}"</p>`;
-
-                    if (o.distancia_tierra_au && o.distancia_tierra_au > 0) {
-                        html += `<p><strong>Distancia a la Tierra:</strong> ${o.distancia_tierra_au} AU</p>`;
-                    }
-                    if (o.distancia_sol_au && o.distancia_sol_au > 0) {
-                        html += `<p><strong>Distancia al Sol:</strong> ${o.distancia_sol_au} AU</p>`;
-                    }
-
-                    html += `</div>`;
-                }
-
-                if (r.calidad_pct < 30) {
-                    html += `<p class="aviso">⚠️ Calidad baja. Considera otra fecha,
-                        mejor seeing o fase lunar más oscura.</p>`;
-                }
-
-                html += `</div>`;
-            }
-
-            html += '</div>';
-            document.getElementById('resultados').innerHTML = html;
-
-        } catch (err) {
-            document.getElementById('spinner').style.display = 'none';
-            document.getElementById('resultados').innerHTML =
-                `<div class="error">❌ Error de conexión: ${err.message}</div>`;
+        html += `<div class="readout-row">`;
+        const esLuna = r.objeto === 'luna';
+        html += readout(esLuna ? 'FASE LUNAR' : 'DISCO ILUM.', `${mo.fase_objeto_pct.toFixed(0)}%`);
+        html += readout('DIÁMETRO', `${mo.diametro.toFixed(2)}"`);
+        if (mo.distancia_tierra_au && mo.distancia_tierra_au > 0) {
+            html += readout('DIST. TIERRA', `${mo.distancia_tierra_au.toFixed(3)} UA`);
         }
-    });
+        html += `</div>`;
+    }
+
+    if (r.calidad_pct < 30) {
+        html += `<div class="banner banner-amber">
+            <span class="banner-icon">⚠️</span>
+            <p>Calidad baja. Considera otra fecha, mejor seeing o fase lunar más oscura.</p>
+        </div>`;
+    }
+
+    html += `</div></div>`;
+    return html;
+}
+
+function renderError(mensaje) {
+    return `<div class="banner banner-error">
+        <span class="banner-icon">⛔</span>
+        <div>
+            <p class="banner-error-title">Fallo en la transmisión</p>
+            <p>${mensaje}</p>
+        </div>
+    </div>`;
+}
+
+document.getElementById('form-optimizar').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+
+    const btn = document.getElementById('btn-submit');
+    const scanning = document.getElementById('scanning');
+    const resultados = document.getElementById('resultados');
+
+    btn.disabled = true;
+    btn.textContent = 'PROCESANDO...';
+    scanning.style.display = 'flex';
+    resultados.classList.remove('visible');
+    resultados.innerHTML = '';
+
+    try {
+        const resp = await fetch('/optimizar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await resp.json();
+
+        scanning.style.display = 'none';
+        btn.disabled = false;
+        btn.textContent = 'Optimizar observación';
+
+        if (result.error) {
+            resultados.innerHTML = renderError(result.error);
+            resultados.classList.add('visible');
+            return;
+        }
+
+        const r = result.resultados[0];
+        resultados.innerHTML = r
+            ? renderResultado(r)
+            : '<p class="texto-vacio">Sin ventanas viables para estos parámetros.</p>';
+        resultados.classList.add('visible');
+        resultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+        scanning.style.display = 'none';
+        btn.disabled = false;
+        btn.textContent = 'Optimizar observación';
+        resultados.innerHTML = renderError(`Error de conexión: ${err.message}`);
+        resultados.classList.add('visible');
+    }
+});
 </script>
 </body>
 </html>
