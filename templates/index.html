@@ -391,6 +391,13 @@ small.helper {
     display: block;
 }
 
+.ventana-rango {
+    font-family: var(--font-data);
+    font-size: 14px;
+    color: var(--text-primary);
+    margin: 8px 0 0;
+}
+
 /* ── Banner de aviso / error ─────────────────────────────────── */
 
 .banner {
@@ -635,17 +642,19 @@ function readout(label, value, color) {
     </div>`;
 }
 
-function formatFechaCorta(isoStr) {
+function formatFechaHora(isoStr) {
     const d = new Date(isoStr);
-    const dd = String(d.getDate()).padStart(2, '0');
+    const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
     const hh = String(d.getHours()).padStart(2, '0');
     const mi = String(d.getMinutes()).padStart(2, '0');
-    return `${dd}/${mm} ${hh}:${mi}`;
+    return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
 }
 
 function renderResultado(r) {
     const mo = r.optimo;
+    const signo = r.offset_utc >= 0 ? '+' : '';
 
     let html = `<h2 class="resultado-titulo">Mejor escenario</h2>`;
     html += `<div class="panel">`;
@@ -659,15 +668,27 @@ function renderResultado(r) {
     html += gaugeHtml(r.calidad_pct, r.categoria);
 
     html += `<div class="divider"></div>`;
-    html += `<div class="readout-row">`;
-    html += readout('INICIO LOC', formatFechaCorta(r.inicio));
+    html += `<span class="subsection-label">Ventana (UTC${signo}${r.offset_utc})</span>`;
+    html += `<p class="ventana-rango">${formatFechaHora(r.inicio)} &nbsp;→&nbsp; ${formatFechaHora(r.fin)}</p>`;
+
+    html += `<div class="readout-row" style="margin-top:14px;">`;
     html += readout('DURACIÓN', `${Math.round(r.duracion_min)} min`);
     html += readout('AUMENTO', `${r.aumento}x`, 'var(--phosphor)');
+    if (r.fase_lunar_cielo) {
+        html += readout('COND. LUNAR', r.fase_lunar_cielo);
+    }
     html += `</div>`;
 
     if (mo) {
         html += `<div class="divider"></div>`;
         html += `<span class="subsection-label">Momento óptimo</span>`;
+        html += `<div class="readout-row" style="margin-bottom:14px;">`;
+        html += readout('HORA LOC', formatFechaHora(mo.hora_loc));
+        html += `</div>`;
+        html += `<div class="readout-row" style="margin-bottom:14px;">`;
+        html += readout('HORA UTC', formatFechaHora(mo.hora_utc), 'var(--text-secondary)');
+        html += `</div>`;
+
         html += `<div class="readout-row" style="margin-bottom:14px;">`;
         html += readout('ALT', `${mo.altitud.toFixed(1)}°`);
         html += readout('AZ', `${mo.azimut.toFixed(1)}°`);
@@ -675,11 +696,12 @@ function renderResultado(r) {
         html += `</div>`;
 
         html += `<div class="readout-row">`;
-        const esLuna = r.objeto === 'luna';
-        html += readout(esLuna ? 'FASE LUNAR' : 'DISCO ILUM.', `${mo.fase_objeto_pct.toFixed(0)}%`);
         html += readout('DIÁMETRO', `${mo.diametro.toFixed(2)}"`);
         if (mo.distancia_tierra_au && mo.distancia_tierra_au > 0) {
             html += readout('DIST. TIERRA', `${mo.distancia_tierra_au.toFixed(3)} UA`);
+        }
+        if (mo.distancia_sol_au && mo.distancia_sol_au > 0) {
+            html += readout('DIST. SOL', `${mo.distancia_sol_au.toFixed(3)} UA`);
         }
         html += `</div>`;
     }
